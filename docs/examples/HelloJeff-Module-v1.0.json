@@ -1,95 +1,193 @@
 {
   "manifestVersion": "1.0",
-  "namespace": "JEFF.Examples.HelloJeff.Core",
-  "jeffId": "a3b8c4d7-1f2e-5g6h-7i8j-9k0l1m2n3o4p",
-  "moduleKind": "stateful",
+  "namespace": "JEFF.Platform.Time.MonotonicProvider",
+  "jeffId": "c5d0e6f9-3h4g-7i8j-9k0l-1m2n3o4p5q6r",
+  "moduleKind": "boundary",
   "toolchain": {
     "name": "JEFF Preview Toolchain",
     "version": "0.1.0"
   },
   "provenance": {
-    "sourceHash": "sha256:1a2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890",
+    "sourceHash": "sha256:3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890abcd",
     "vcs": {
       "type": "git",
       "ref": "https://github.com/DarthsideDave/jeffstandard-preview-dec2025"
     },
     "artifactDigests": [
-      "sha256:1a2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890"
+      "sha256:3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890abcd"
     ]
   },
   "certification": {
     "caId": "preview.darthsidedave.jeff",
-    "signature": "PROVISIONAL_PREVIEW_SIGNATURE_2025_DECEMBER",
-    "issuedAt": "2025-12-04T20:00:00Z"
+    "signature": "PROVISIONAL_PREVIEW_SIGNATURE_2025_DECEMBER_BOUNDARY",
+    "issuedAt": "2025-12-04T22:00:00Z"
   },
   "lifecycle": {
-    "init": { "entryInvariants": [], "exitInvariants": [], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 5000, "memoryBytesMax": 1024, "eventEmissionsMax": 0 }, "failures": [] },
-    "bind": { "entryInvariants": [], "exitInvariants": [], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 2000, "memoryBytesMax": 512, "eventEmissionsMax": 0 }, "failures": [] },
-    "activate": { "entryInvariants": [], "exitInvariants": [], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 3000, "memoryBytesMax": 512, "eventEmissionsMax": 0 }, "failures": [] },
+    "init": {
+      "entryInvariants": [],
+      "exitInvariants": [],
+      "allowedMutations": [],
+      "emittableEvents": [],
+      "budgets": {
+        "cpuCyclesMax": 10000,
+        "memoryBytesMax": 2048,
+        "eventEmissionsMax": 0
+      },
+      "failures": [
+        {
+          "code": "PLATFORM_TIME_UNAVAILABLE",
+          "policy": "rollback"
+        }
+      ]
+    },
+    "bind": {
+      "entryInvariants": [],
+      "exitInvariants": [],
+      "allowedMutations": [],
+      "emittableEvents": [],
+      "budgets": {
+        "cpuCyclesMax": 2000,
+        "memoryBytesMax": 512,
+        "eventEmissionsMax": 0
+      },
+      "failures": []
+    },
+    "activate": {
+      "entryInvariants": [],
+      "exitInvariants": [],
+      "allowedMutations": [],
+      "emittableEvents": [],
+      "budgets": {
+        "cpuCyclesMax": 3000,
+        "memoryBytesMax": 1024,
+        "eventEmissionsMax": 0
+      },
+      "failures": []
+    },
     "tick": {
       "entryInvariants": [],
       "exitInvariants": [],
-      "allowedMutations": ["tickCount"],
-      "emittableEvents": ["JEFF.Examples.HelloJeff.Greeting"],
-      "budgets": { "cpuCyclesMax": 20000, "memoryBytesMax": 4096, "eventEmissionsMax": 1 },
+      "allowedMutations": [],
+      "emittableEvents": [
+        "JEFF.Platform.Time.Tick"
+      ],
+      "budgets": {
+        "cpuCyclesMax": 5000,
+        "memoryBytesMax": 1024,
+        "eventEmissionsMax": 1
+      },
+      "failures": [
+        {
+          "code": "TIME_READ_FAILED",
+          "policy": "retry"
+        }
+      ]
+    },
+    "deactivate": {
+      "entryInvariants": [],
+      "exitInvariants": [],
+      "allowedMutations": [],
+      "emittableEvents": [],
+      "budgets": {
+        "cpuCyclesMax": 2000,
+        "memoryBytesMax": 512,
+        "eventEmissionsMax": 0
+      },
       "failures": []
     },
-    "deactivate": { "entryInvariants": [], "exitInvariants": [], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 2000, "memoryBytesMax": 512, "eventEmissionsMax": 0 }, "failures": [] },
-    "destroy": { "entryInvariants": [], "exitInvariants": [], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 1000, "memoryBytesMax": 512, "eventEmissionsMax": 0 }, "failures": [] }
+    "destroy": {
+      "entryInvariants": [],
+      "exitInvariants": [],
+      "allowedMutations": [],
+      "emittableEvents": [],
+      "budgets": {
+        "cpuCyclesMax": 1000,
+        "memoryBytesMax": 256,
+        "eventEmissionsMax": 0
+      },
+      "failures": []
+    }
   },
   "interfaces": {
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "JEFF.Platform.Time.Request",
+        "version": "1.0.0",
+        "schemaRef": "https://jeffstandard.org/schemas/TimeRequest-v1.json",
+        "selectionPredicate": "payload.format == 'monotonic_ns'",
+        "rateLimit": {
+          "perSecond": 1000,
+          "burst": 5000
+        }
+      }
+    ],
     "outputs": [
       {
-        "name": "JEFF.Examples.HelloJeff.Greeting",
+        "name": "JEFF.Platform.Time.Tick",
         "version": "1.0.0",
-        "schemaRef": "https://jeffstandard.org/schemas/StringMessage-v1.json",
+        "schemaRef": "https://jeffstandard.org/schemas/TimeResponse-v1.json",
         "selectionPredicate": "true",
-        "rateLimit": { "perSecond": 1, "burst": 2 }
+        "rateLimit": {
+          "perSecond": 1000,
+          "burst": 5000
+        }
       }
     ],
-    "state": [
+    "state": [],
+    "external": [
       {
-        "name": "tickCount",
-        "type": "u64",
-        "version": "1.0.0",
-        "mutable": true,
-        "visibility": "inspectable"
+        "namespace": "JEFF.Engine.SystemClock.Monotonic",
+        "contractId": "monotonic-time-v1",
+        "expectedBehavior": "Returns nanoseconds since system boot via platform-specific syscall (clock_gettime on POSIX, QueryPerformanceCounter on Windows). Guaranteed monotonic, never goes backward. Max latency: 100ns on modern hardware."
       }
     ],
-    "external": [],
     "adapters": []
   },
   "resources": {
-    "globalBudgets": { "cpuCyclesMax": 50000, "memoryBytesMax": 16384, "eventEmissionsMax": 10 },
+    "globalBudgets": {
+      "cpuCyclesMax": 25000,
+      "memoryBytesMax": 8192,
+      "eventEmissionsMax": 1000
+    },
     "perEventCosts": [
-      { "eventName": "JEFF.Examples.HelloJeff.Greeting", "worstCpuCycles": 12000, "worstMemoryBytes": 1024 }
+      {
+        "eventName": "JEFF.Platform.Time.Tick",
+        "worstCpuCycles": 2000,
+        "worstMemoryBytes": 256
+      }
     ],
     "latencySlos": [
-      { "eventName": "*", "phase": "tick", "latencyMaxMs": 16 }
+      {
+        "eventName": "JEFF.Platform.Time.Request",
+        "phase": "tick",
+        "latencyMaxMs": 1
+      }
     ],
-    "isolationClass": "constrained"
+    "isolationClass": "boundary"
   },
   "governance": {
-    "versioning": { "strategy": "semver" },
-    "deprecationPlan": { "sunsetDate": null },
-    "inspection": { "allowedInspectors": ["*"], "redactions": [], "sampling": { "rate": 1.0, "capPerSecond": 100 } },
+    "versioning": {
+      "strategy": "semver"
+    },
+    "deprecationPlan": {},
+    "inspection": {
+      "allowedInspectors": ["JEFF.Inspector.Security.*", "JEFF.Inspector.Performance.*"],
+      "redactions": [],
+      "sampling": {
+        "rate": 0.01,
+        "capPerSecond": 100
+      }
+    },
     "telemetry": {
-      "counters": ["tickCount", "greetingsEmitted"],
-      "traces": [],
-      "replayRecords": true,
-      "retentionDays": 30
+      "counters": ["timeRequestsReceived", "ticksEmitted", "syscallFailures"],
+      "traces": ["syscall_latency_ns", "event_processing_time_us"],
+      "replayRecords": false,
+      "retentionDays": 1
     }
   },
   "canonicalization": {
     "rules": "deterministic-json-canonicalization-v1",
-    "replayHash": "sha256:cafebabe133713371337133713371337cafebabe133713371337133713371337",
+    "replayHash": "sha256:f00dface133713371337133713371337f00dface133713371337133713371337",
     "sourceHashPolicy": "content-addressable"
   }
-}
-Expected payload when the first runtime runs it:
-{
-  "message": "Hello World! Our name is JEFF.",
-  "tick": 42,
-  "module": "JEFF.Examples.HelloJeff.Core"
 }
