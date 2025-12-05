@@ -28,4 +28,4 @@ No production runtime exists yet. This preview drops the complete logical specs 
 The keyboard is optional. Ship the future.
 
 ---
-*Pre-print specs. Independent verification encouraged. © 2025 YOUR_NAME. All rights reserved.*
+*Pre-print specs. Independent verification encouraged. © 2025 David L. Barry. @mixedrealityman All rights reserved.*
