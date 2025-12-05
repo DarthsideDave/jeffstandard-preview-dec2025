@@ -1,0 +1,71 @@
+{
+  "$schema": "https://jeffstandard.org/schema/describe-manifest-v1.0-preview.json",
+  "manifestVersion": "1.0",
+  "namespace": "JEFF.Examples.Core.HelloJeff",
+  "jeffId": "c0a1e5d0-0d1e-5d0c-9e5d-0a1e5d0d1e5d",
+  "moduleKind": "pure",
+  "toolchain": {
+    "name": "Grok-4 JEFF Genesis Toolchain (provisional)",
+    "version": "2025.12.04-genesis"
+  },
+  "provenance": {
+    "sourceHash": "sha256:7e1e5d0d1e5d0c9e5d0a1e5d0d1e5d0c9e5d0a1e5d0d1e5d0c9e5d0a1e5d0d1e",
+    "vcs": { "type": "none", "ref": "genesis" },
+    "artifactDigests": [
+      "sha256:8f4e5d0c9e5d0a1e5d0d1e5d0c9e5d0a1e5d0d1e5d0c9e5d0a1e5d0d1e5d0c9"
+    ]
+  },
+  "certification": {
+    "caId": "provisional-grok4-genesis-2025",
+    "signature": "PROVISIONAL-SELFSIGN-PLACEHOLDER-DEC2025",
+    "issuedAt": "2025-12-04T12:00:00Z"
+  },
+  "lifecycle": {
+    "init": { "entryInvariants": [], "exitInvariants": [], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 1000, "memoryBytesMax": 1024, "eventEmissionsMax": 0 }, "failures": [] },
+    "bind": { "entryInvariants": [], "exitInvariants": [], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 1000, "memoryBytesMax": 1024, "eventEmissionsMax": 0 }, "failures": [] },
+    "activate": { "entryInvariants": [], "exitInvariants": [{"name":"printed","expression":"state.printed == true"}], "allowedMutations": ["printed"], "emittableEvents": [], "budgets": { "cpuCyclesMax": 50000, "memoryBytesMax": 4096, "eventEmissionsMax": 0 }, "failures": [] },
+    "tick": { "entryInvariants": [{"name":"hasPrinted","expression":"state.printed == true"}], "exitInvariants": [{"name":"hasPrinted","expression":"state.printed == true"}], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 1000, "memoryBytesMax": 1024, "eventEmissionsMax": 0 }, "failures": [] },
+    "deactivate": { "entryInvariants": [], "exitInvariants": [], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 1000, "memoryBytesMax": 1024, "eventEmissionsMax": 0 }, "failures": [] },
+    "destroy": { "entryInvariants": [], "exitInvariants": [], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 1000, "memoryBytesMax": 1024, "eventEmissionsMax": 0 }, "failures": [] }
+  },
+  "interfaces": {
+    "inputs": [],
+    "outputs": [],
+    "state": [
+      {
+        "name": "printed",
+        "type": "bool",
+        "version": "1.0.0",
+        "mutable": true,
+        "visibility": "inspectable"
+      }
+    ],
+    "external": [
+      {
+        "namespace": "JEFF.Platform.Console",
+        "contractId": "WriteLine",
+        "expectedBehavior": "Writes UTF-8 string followed by newline to host console"
+      }
+    ],
+    "adapters": []
+  },
+  "resources": {
+    "globalBudgets": { "cpuCyclesMax": 100000, "memoryBytesMax": 8192, "eventEmissionsMax": 0 },
+    "perEventCosts": [],
+    "latencySlos": [
+      { "eventName": null, "phase": "activate", "latencyMaxMs": 50 }
+    ],
+    "isolationClass": "pure"
+  },
+  "governance": {
+    "versioning": { "strategy": "semver" },
+    "deprecationPlan": null,
+    "inspection": { "allowedInspectors": ["*"], "redactions": [], "sampling": { "rate": 1.0 } },
+    "telemetry": { "counters": ["activate_calls"], "traces": [], "replayRecords": true, "retentionDays": 365 }
+  },
+  "canonicalization": {
+    "rules": "deterministic-wasm-no-float-no-time",
+    "replayHash": "pending-runtime-generation",
+    "sourceHashPolicy": "sha256-of-wasm-binary"
+  }
+}
