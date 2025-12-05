@@ -1,0 +1,267 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jeffstandard.org/schema/describe-manifest-v1.0-preview.json",
+  "title": "JEFF Describe Manifest v1.0 – Preview Release December 2025",
+  "description": "Machine-readable module declaration. Author & future JCA: David L. Barry – All pre-JCA certifications are provisional and revocable.",
+  "type": "object",
+  "required": ["manifestVersion", "namespace", "jeffId", "moduleKind", "toolchain", "provenance", "certification", "lifecycle", "interfaces", "resources", "governance", "canonicalization"],
+  "properties": {
+    "manifestVersion": { 
+      "type": "string", 
+      "pattern": "^1\\.0(\\.\\d+)?$",
+      "$comment": "Fixed to v1.0 for preview; future increments via governance.versioning."
+    },
+    "namespace": { 
+      "type": "string", 
+      "pattern": "^JEFF\\.[A-Za-z0-9]+\\.[A-Za-z0-9]+\\.[A-Za-z0-9]+$",
+      "$comment": "Enforces Law 1 hierarchy."
+    },
+    "jeffId": { 
+      "type": "string", 
+      "format": "uuid",
+      "$comment": "UUIDv5 from source hash per Law 15."
+    },
+    "moduleKind": { 
+      "type": "string", 
+      "enum": ["pure", "stateful", "adapter", "boundary", "inspector", "engine"] 
+    },
+    "toolchain": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" }
+      },
+      "$comment": "Must match certification for Law 15."
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["sourceHash", "vcs", "artifactDigests"],
+      "properties": {
+        "sourceHash": { "type": "string" },
+        "vcs": { 
+          "type": "object", 
+          "properties": { 
+            "type": { "type": "string" }, 
+            "ref": { "type": "string" } 
+          } 
+        },
+        "artifactDigests": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "certification": {
+      "type": "object",
+      "required": ["caId", "signature", "issuedAt"],
+      "properties": {
+        "caId": { "type": "string" },
+        "signature": { "type": "string" },
+        "issuedAt": { "type": "string", "format": "date-time" }
+      },
+      "$comment": "Provisional until official JCA; see README."
+    },
+    "lifecycle": {
+      "type": "object",
+      "required": ["init", "bind", "activate", "tick", "deactivate", "destroy"],
+      "properties": {
+        "init": { "$ref": "#/$defs/phase" },
+        "bind": { "$ref": "#/$defs/phase" },
+        "activate": { "$ref": "#/$defs/phase" },
+        "tick": { "$ref": "#/$defs/phase" },
+        "deactivate": { "$ref": "#/$defs/phase" },
+        "destroy": { "$ref": "#/$defs/phase" }
+      },
+      "$comment": "Enforces Law 5 exactly."
+    },
+    "interfaces": {
+      "type": "object",
+      "required": ["inputs", "outputs", "state", "external", "adapters"],
+      "properties": {
+        "inputs": { "type": "array", "items": { "$ref": "#/$defs/eventContract" } },
+        "outputs": { "type": "array", "items": { "$ref": "#/$defs/eventContract" } },
+        "state": { "type": "array", "items": { "$ref": "#/$defs/stateField" } },
+        "external": { "type": "array", "items": { "$ref": "#/$defs/externalRef" } },
+        "adapters": { "type": "array", "items": { "$ref": "#/$defs/adapter" } }
+      },
+      "$comment": "Enforces Laws 4, 6, 8, 14."
+    },
+    "resources": {
+      "type": "object",
+      "required": ["globalBudgets", "perEventCosts", "latencySlos", "isolationClass"],
+      "properties": {
+        "globalBudgets": { "$ref": "#/$defs/budgets" },
+        "perEventCosts": { "type": "array", "items": { "$ref": "#/$defs/eventCost" } },
+        "latencySlos": { "type": "array", "items": { "$ref": "#/$defs/latencySlo" } },
+        "isolationClass": { "type": "string", "enum": ["pure", "constrained", "boundary"] }
+      },
+      "$comment": "Enforces Law 12."
+    },
+    "governance": {
+      "type": "object",
+      "required": ["versioning", "deprecationPlan", "inspection", "telemetry"],
+      "properties": {
+        "versioning": { "$ref": "#/$defs/versioning" },
+        "deprecationPlan": { "$ref": "#/$defs/deprecationPlan" },
+        "inspection": { "$ref": "#/$defs/inspection" },
+        "telemetry": { "$ref": "#/$defs/telemetry" }
+      },
+      "$comment": "Enforces Law 11."
+    },
+    "canonicalization": {
+      "type": "object",
+      "required": ["rules", "replayHash", "sourceHashPolicy"],
+      "properties": {
+        "rules": { "type": "string" },
+        "replayHash": { "type": "string" },
+        "sourceHashPolicy": { "type": "string" }
+      },
+      "$comment": "Supports deterministic replay from Law 3 consequences."
+    }
+  },
+  "$defs": {
+    "phase": {
+      "type": "object",
+      "required": ["entryInvariants", "exitInvariants", "allowedMutations", "emittableEvents", "budgets", "failures"],
+      "properties": {
+        "entryInvariants": { "type": "array", "items": { "$ref": "#/$defs/invariant" } },
+        "exitInvariants": { "type": "array", "items": { "$ref": "#/$defs/invariant" } },
+        "allowedMutations": { "type": "array", "items": { "type": "string" } },
+        "emittableEvents": { "type": "array", "items": { "type": "string" } },
+        "budgets": { "$ref": "#/$defs/budgets" },
+        "failures": { "type": "array", "items": { "$ref": "#/$defs/failureMode" } }
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "required": ["cpuCyclesMax", "memoryBytesMax", "eventEmissionsMax"],
+      "properties": {
+        "cpuCyclesMax": { "type": "integer", "minimum": 0 },
+        "memoryBytesMax": { "type": "integer", "minimum": 0 },
+        "eventEmissionsMax": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "eventContract": {
+      "type": "object",
+      "required": ["name", "version", "schemaRef", "selectionPredicate", "rateLimit"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "schemaRef": { "type": "string" },
+        "selectionPredicate": { "type": "string" },
+        "rateLimit": { 
+          "type": "object", 
+          "properties": { 
+            "perSecond": { "type": "integer" }, 
+            "burst": { "type": "integer" } 
+          } 
+        }
+      }
+    },
+    "stateField": {
+      "type": "object",
+      "required": ["name", "type", "version", "mutable", "visibility"],
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "mutable": { "type": "boolean" },
+        "visibility": { "type": "string", "enum": ["private", "public", "inspectable"] }
+      }
+    },
+    "externalRef": {
+      "type": "object",
+      "required": ["namespace", "contractId", "expectedBehavior"],
+      "properties": {
+        "namespace": { 
+          "type": "string", 
+          "pattern": "^JEFF\\.(External|Engine|Platform)\\.[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*$" 
+        },
+        "contractId": { "type": "string" },
+        "expectedBehavior": { "type": "string" }
+      }
+    },
+    "adapter": {
+      "type": "object",
+      "required": ["fromVersion", "toVersion", "performanceBounds"],
+      "properties": {
+        "fromVersion": { "type": "string" },
+        "toVersion": { "type": "string" },
+        "performanceBounds": { 
+          "type": "object", 
+          "properties": { 
+            "latencyMaxMs": { "type": "integer" }, 
+            "cpuCyclesMax": { "type": "integer" } 
+          } 
+        }
+      }
+    },
+    "eventCost": {
+      "type": "object",
+      "required": ["eventName", "worstCpuCycles", "worstMemoryBytes"],
+      "properties": {
+        "eventName": { "type": "string" },
+        "worstCpuCycles": { "type": "integer" },
+        "worstMemoryBytes": { "type": "integer" }
+      }
+    },
+    "latencySlo": {
+      "type": "object",
+      "required": ["eventName", "phase", "latencyMaxMs"],
+      "properties": {
+        "eventName": { "type": "string" },
+        "phase": { "type": "string", "enum": ["init", "bind", "activate", "tick", "deactivate", "destroy"] },
+        "latencyMaxMs": { "type": "integer" }
+      }
+    },
+    "versioning": {
+      "type": "object",
+      "required": ["strategy"],
+      "properties": { "strategy": { "type": "string", "enum": ["semver"] } }
+    },
+    "deprecationPlan": {
+      "type": "object",
+      "properties": {
+        "sunsetDate": { "type": "string", "format": "date" },
+        "adapters": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "inspection": {
+      "type": "object",
+      "properties": {
+        "allowedInspectors": { "type": "array", "items": { "type": "string" } },
+        "redactions": { "type": "array", "items": { "type": "string" } },
+        "sampling": { 
+          "type": "object", 
+          "properties": { 
+            "rate": { "type": "number" }, 
+            "capPerSecond": { "type": "integer" } 
+          } 
+        }
+      }
+    },
+    "telemetry": {
+      "type": "object",
+      "properties": {
+        "counters": { "type": "array", "items": { "type": "string" } },
+        "traces": { "type": "array", "items": { "type": "string" } },
+        "replayRecords": { "type": "boolean" },
+        "retentionDays": { "type": "integer" }
+      }
+    },
+    "invariant": {
+      "type": "object",
+      "required": ["name", "expression"],
+      "properties": {
+        "name": { "type": "string" },
+        "expression": { "type": "string" }
+      }
+    },
+    "failureMode": {
+      "type": "object",
+      "required": ["code", "policy"],
+      "properties": {
+        "code": { "type": "string" },
+        "policy": { "type": "string", "enum": ["rollback", "retry", "degrade", "quarantine"] }
+      }
+    }
+  }
+}
