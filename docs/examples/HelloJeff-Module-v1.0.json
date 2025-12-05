@@ -1,0 +1,95 @@
+{
+  "manifestVersion": "1.0",
+  "namespace": "JEFF.Examples.HelloJeff.Core",
+  "jeffId": "a3b8c4d7-1f2e-5g6h-7i8j-9k0l1m2n3o4p",
+  "moduleKind": "stateful",
+  "toolchain": {
+    "name": "JEFF Preview Toolchain",
+    "version": "0.1.0"
+  },
+  "provenance": {
+    "sourceHash": "sha256:1a2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890",
+    "vcs": {
+      "type": "git",
+      "ref": "https://github.com/DarthsideDave/jeffstandard-preview-dec2025"
+    },
+    "artifactDigests": [
+      "sha256:1a2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890"
+    ]
+  },
+  "certification": {
+    "caId": "preview.darthsidedave.jeff",
+    "signature": "PROVISIONAL_PREVIEW_SIGNATURE_2025_DECEMBER",
+    "issuedAt": "2025-12-04T20:00:00Z"
+  },
+  "lifecycle": {
+    "init": { "entryInvariants": [], "exitInvariants": [], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 5000, "memoryBytesMax": 1024, "eventEmissionsMax": 0 }, "failures": [] },
+    "bind": { "entryInvariants": [], "exitInvariants": [], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 2000, "memoryBytesMax": 512, "eventEmissionsMax": 0 }, "failures": [] },
+    "activate": { "entryInvariants": [], "exitInvariants": [], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 3000, "memoryBytesMax": 512, "eventEmissionsMax": 0 }, "failures": [] },
+    "tick": {
+      "entryInvariants": [],
+      "exitInvariants": [],
+      "allowedMutations": ["tickCount"],
+      "emittableEvents": ["JEFF.Examples.HelloJeff.Greeting"],
+      "budgets": { "cpuCyclesMax": 20000, "memoryBytesMax": 4096, "eventEmissionsMax": 1 },
+      "failures": []
+    },
+    "deactivate": { "entryInvariants": [], "exitInvariants": [], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 2000, "memoryBytesMax": 512, "eventEmissionsMax": 0 }, "failures": [] },
+    "destroy": { "entryInvariants": [], "exitInvariants": [], "allowedMutations": [], "emittableEvents": [], "budgets": { "cpuCyclesMax": 1000, "memoryBytesMax": 512, "eventEmissionsMax": 0 }, "failures": [] }
+  },
+  "interfaces": {
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "JEFF.Examples.HelloJeff.Greeting",
+        "version": "1.0.0",
+        "schemaRef": "https://jeffstandard.org/schemas/StringMessage-v1.json",
+        "selectionPredicate": "true",
+        "rateLimit": { "perSecond": 1, "burst": 2 }
+      }
+    ],
+    "state": [
+      {
+        "name": "tickCount",
+        "type": "u64",
+        "version": "1.0.0",
+        "mutable": true,
+        "visibility": "inspectable"
+      }
+    ],
+    "external": [],
+    "adapters": []
+  },
+  "resources": {
+    "globalBudgets": { "cpuCyclesMax": 50000, "memoryBytesMax": 16384, "eventEmissionsMax": 10 },
+    "perEventCosts": [
+      { "eventName": "JEFF.Examples.HelloJeff.Greeting", "worstCpuCycles": 12000, "worstMemoryBytes": 1024 }
+    ],
+    "latencySlos": [
+      { "eventName": "*", "phase": "tick", "latencyMaxMs": 16 }
+    ],
+    "isolationClass": "constrained"
+  },
+  "governance": {
+    "versioning": { "strategy": "semver" },
+    "deprecationPlan": { "sunsetDate": null },
+    "inspection": { "allowedInspectors": ["*"], "redactions": [], "sampling": { "rate": 1.0, "capPerSecond": 100 } },
+    "telemetry": {
+      "counters": ["tickCount", "greetingsEmitted"],
+      "traces": [],
+      "replayRecords": true,
+      "retentionDays": 30
+    }
+  },
+  "canonicalization": {
+    "rules": "deterministic-json-canonicalization-v1",
+    "replayHash": "sha256:cafebabe133713371337133713371337cafebabe133713371337133713371337",
+    "sourceHashPolicy": "content-addressable"
+  }
+}
+Expected payload when the first runtime runs it:
+{
+  "message": "Hello World! Our name is JEFF.",
+  "tick": 42,
+  "module": "JEFF.Examples.HelloJeff.Core"
+}
