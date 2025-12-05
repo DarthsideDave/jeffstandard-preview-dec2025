@@ -1,0 +1,52 @@
+<svg width="900" height="400" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+    </marker>
+  </defs>
+
+  <rect x="20" y="150" width="120" height="60" rx="10" fill="#bbf" stroke="#333"/>
+  <text x="80" y="185" text-anchor="middle" font-weight="bold">Unloaded</text>
+
+  <line x1="140" y1="180" x2="200" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="170" y="165" text-anchor="middle" font-size="12">on load</text>
+
+  <rect x="220" y="150" width="120" height="60" rx="10" fill="#bfb" stroke="#333"/>
+  <text x="280" y="185" text-anchor="middle" font-weight="bold">Initialised</text>
+
+  <line x1="340" y1="180" x2="400" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="420" y="150" width="120" height="60" rx="10" fill="#ffb" stroke="#333"/>
+  <text x="480" y="185" text-anchor="middle" font-weight="bold">Bound</text>
+
+  <line x1="540" y1="180" x2="600" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="620" y="150" width="120" height="60" rx="10" fill="#ff9" stroke="#333"/>
+  <text x="680" y="185" text-anchor="middle" font-weight="bold">Activated</text>
+
+  <line x1="740" y1="180" x2="800" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="820" y="150" width="120" height="60" rx="10" fill="#9f9" stroke="#333"/>
+  <text x="880" y="185" text-anchor="middle" font-weight="bold">Ticking</text>
+
+  <line x1="880" y1="210" x2="880" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="885" y="240" text-anchor="middle" font-size="12">Tick</text>
+
+  <line x1="760" y1="180" x2="700" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="580" y="150" width="120" height="60" rx="10" fill="#f99" stroke="#333"/>
+  <text x="640" y="185" text-anchor="middle" font-weight="bold">Deactivated</text>
+
+  <line x1="640" y1="210" x2="640" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="580" y="270" width="120" height="60" rx="10" fill="#ddd" stroke="#333"/>
+  <text x="640" y="305" text-anchor="middle" font-weight="bold">Destroyed</text>
+
+  <!-- Quarantine paths -->
+  <line x1="280" y1="210" x2="280" y2="300" stroke="#c00" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrow)"/>
+  <line x1="480" y1="210" x2="480" y2="300" stroke="#c00" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrow)"/>
+  <line x1="680" y1="210" x2="680" y2="300" stroke="#c00" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrow)"/>
+  <rect x="220" y="320" width="120" height="60" rx="10" fill="#fcc" stroke="#c00"/>
+  <text x="280" y="355" text-anchor="middle" fill="#c00" font-weight="bold">Quarantined</text>
+
+  <title>JEFF Module Lifecycle – Preview December 2025</title>
+</svg>
