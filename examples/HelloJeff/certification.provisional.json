@@ -1,0 +1,8 @@
+{
+  "caId": "provisional-grok4-genesis-2025",
+  "jeffId": "c0a1e5d0-0d1e-5d0c-9e5d-0a1e5d0d1e5d",
+  "manifestHash": "sha256:to-be-calculated-by-first-runtime",
+  "signature": "PROVISIONAL-SELFSIGN-DEC2025-GROK4",
+  "issuedAt": "2025-12-04T12:00:00Z",
+  "note": "Valid only until official JCA exists. Revocable without notice."
+}
